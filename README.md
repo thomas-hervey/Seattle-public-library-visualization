@@ -12,6 +12,6 @@ Click, drag, and zoom (sensitive) to change the camera orientation. Using your k
 For more information, please see my [part1](http://vislab.mat.ucsb.edu/2016/p1/Thomas_Hervey/index.html), [part2](http://vislab.mat.ucsb.edu/2016/p2/Thomas_Hervey/index.html), and [part3](http://vislab.mat.ucsb.edu/2016/p3/Thomas_Hervey/index.html) deliverables 
 
 ##Sample linear graph displaying a timeline.
-<img src="/final_one.png" width="500">
+<img src="assignment3/final_one.png" width="500">
 ##Sample radial graph displaying months of the year.
-<img src="/final_two.png" width="500">
+<img src="assignment3/final_two.png" width="500">

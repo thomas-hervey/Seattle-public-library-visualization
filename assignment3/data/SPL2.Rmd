@@ -1,0 +1,368 @@
+---
+title: "SPL"
+author: "Thomas Hervey"
+date: "3.18.16"
+output: pdf_document
+---
+
+```{r echo=FALSE}
+# load starting data
+rm(list=ls())
+par(mar=c(1,1,1,1))
+dat = read.csv("FINAL_working.csv", header=TRUE)
+
+# get columns
+bib = dat[,1]
+isbn = dat[,2]
+bookType = dat[,3]
+title = dat[,4]
+publishDate = dat[,5]
+publishOrder = dat[,6]
+firstCheckOut = dat[,7]
+lastCheckOut = dat[,8]f
+adoption = dat[,9]
+publishDay = dat[,10]
+fcheckoutDay = dat[,11]
+ageFull = dat[,12]
+ageCheckouts = dat[,13]
+y2006 = dat[,14]
+y2007 = dat[,15]
+y2008 = dat[,16]
+y2009 = dat[,17]
+y2010 = dat[,18]
+y2011 = dat[,19]
+y2012 = dat[,20]
+y2013 = dat[,21]
+y2014 = dat[,22]
+y2015 = dat[,23]
+totalCheckout = dat[,24]
+deweyNumber = dat[,25]
+deweyCategory = dat[,26]
+
+# label column names
+colnames(dat) = c("bib","isbn", "bookType", "title",	"publishDate", "publishOrder", "firstCheckOutlastCheckOut", "adoption", "publishDay", "fcheckoutDay", "ageFull", "ageCheckouts", "y2006", "y2007", "y2008", "y2009", "y2010", "y2011", "y2012", "y2013", "y2014", "y2015", "totalCheckout", "deweyNumber", "deweyCategory")
+
+preNorm_2006 = c()
+for(j in y2006){
+  if(j != 10000){
+    preNorm_2006 <- append(preNorm_2006, j)
+  }
+}
+preNorm_2007 = c()
+for(j in y2007){
+  if(j != 10000){
+    preNorm_2007 <- append(preNorm_2007, j)
+  }
+}
+preNorm_2008 = c()
+for(j in y2008){
+  if(j != 10000){
+    preNorm_2008 <- append(preNorm_2008, j)
+  }
+}
+preNorm_2009 = c()
+for(j in y2009){
+  if(j != 10000){
+    preNorm_2009 <- append(preNorm_2009, j)
+  }
+}
+preNorm_2010 = c()
+for(j in y2010){
+  if(j != 10000){
+    preNorm_2010 <- append(preNorm_2010, j)
+  }
+}
+preNorm_2011 = c()
+for(j in y2011){
+  if(j != 10000){
+    preNorm_2011 <- append(preNorm_2011, j)
+  }
+}
+preNorm_2012 = c()
+for(j in y2012){
+  if(j != 10000){
+    preNorm_2012 <- append(preNorm_2012, j)
+  }
+}
+preNorm_2013 = c()
+for(j in y2013){
+  if(j != 10000){
+    preNorm_2013 <- append(preNorm_2013, j)
+  }
+}
+preNorm_2014 = c()
+for(j in y2014){
+  if(j != 10000){
+    preNorm_2014 <- append(preNorm_2014, j)
+  }
+}
+preNorm_2015 = c()
+for(j in y2015){
+  if(j != 10000){
+    preNorm_2015 <- append(preNorm_2015, j)
+  }
+}
+```
+
+```{r echo=FALSE}
+hist(adoption, breaks = 500, xlab="Adoption [days]", main="Book Adoption Frequency")
+curve(dnorm(x, mean=mean(adoption), sd=sd(adoption)), col="red", lwd=2, add=TRUE, yaxt="n")
+
+# 2006 Adoption v Checkout
+bi_2006_checkout = c()
+for(j in preNorm_2006){
+  if(j == 0){
+    bi_2006_checkout <- append(bi_2006_checkout, 0)
+  } else {
+    bi_2006_checkout <- append(bi_2006_checkout, 1)
+  }
+}
+bi_2006_adoption = c()
+for(j in adoption[0:222]){
+  if(j <= 31){
+    bi_2006_adoption <- append(bi_2006_adoption, 0)
+  } else {
+    bi_2006_adoption <- append(bi_2006_adoption, 1)
+  }
+}
+a_c_2006_cor <- cor(bi_2006_adoption, bi_2006_checkout)
+#t_2006 <- t.test(preNorm_2006, bi_2006_checkout)
+
+# 2007 Adoption v Checkout
+bi_2007_checkout = c()
+for(j in preNorm_2007[223:432]){
+  if(j == 0){
+    bi_2007_checkout <- append(bi_2007_checkout, 0)
+  } else {
+    bi_2007_checkout <- append(bi_2007_checkout, 1)
+  }
+}
+bi_2007_adoption = c()
+for(j in adoption[223:432]){
+  if(j <= 31){
+    bi_2007_adoption <- append(bi_2007_adoption, 0)
+  } else {
+    bi_2007_adoption <- append(bi_2007_adoption, 1)
+  }
+}
+a_c_2007_cor <- cor(bi_2007_adoption, bi_2007_checkout)
+#t_2007 <- t.test(bi_2007_adoption, bi_2007_checkout)
+
+# 2008 Adoption v Checkout
+bi_2008_checkout = c()
+for(j in preNorm_2008[433:587]){
+  if(j == 0){
+    bi_2008_checkout <- append(bi_2008_checkout, 0)
+  } else {
+    bi_2008_checkout <- append(bi_2008_checkout, 1)
+  }
+}
+bi_2008_adoption = c()
+for(j in adoption[433:587]){
+  if(j <= 31){
+    bi_2008_adoption <- append(bi_2008_adoption, 0)
+  } else {
+    bi_2008_adoption <- append(bi_2008_adoption, 1)
+  }
+}
+a_c_2008_cor <- cor(bi_2008_adoption, bi_2008_checkout)
+#t_2008 <- t.test(bi_2008_adoption, bi_2008_checkout)
+
+# 2009 Adoption v Checkout
+bi_2009_checkout = c()
+for(j in preNorm_2009[588:813]){
+  if(j == 0){
+    bi_2009_checkout <- append(bi_2009_checkout, 0)
+  } else {
+    bi_2009_checkout <- append(bi_2009_checkout, 1)
+  }
+}
+bi_2009_adoption = c()
+for(j in adoption[588:813]){
+  if(j <= 31){
+    bi_2009_adoption <- append(bi_2009_adoption, 0)
+  } else {
+    bi_2009_adoption <- append(bi_2009_adoption, 1)
+  }
+}
+a_c_2009_cor <- cor(bi_2009_adoption, bi_2009_checkout)
+#t_2009 <- t.test(bi_2009_adoption, bi_2009_checkout)
+
+# 2010 Adoption v Checkout
+bi_2010_checkout = c()
+for(j in preNorm_2010[814:1032]){
+  if(j == 0){
+    bi_2010_checkout <- append(bi_2010_checkout, 0)
+  } else {
+    bi_2010_checkout <- append(bi_2010_checkout, 1)
+  }
+}
+bi_2010_adoption = c()
+for(j in adoption[814:1032]){
+  if(j <= 31){
+    bi_2010_adoption <- append(bi_2010_adoption, 0)
+  } else {
+    bi_2010_adoption <- append(bi_2010_adoption, 1)
+  }
+}
+a_c_2010_cor <- cor(bi_2010_adoption, bi_2010_checkout)
+
+# 2011 Adoption v Checkout
+bi_2011_checkout = c()
+for(j in preNorm_2011[1033:1413]){
+  if(j == 0){
+    bi_2011_checkout <- append(bi_2011_checkout, 0)
+  } else {
+    bi_2011_checkout <- append(bi_2011_checkout, 1)
+  }
+}
+bi_2011_adoption = c()
+for(j in adoption[1033:1413]){
+  if(j <= 31){
+    bi_2011_adoption <- append(bi_2011_adoption, 0)
+  } else {
+    bi_2011_adoption <- append(bi_2011_adoption, 1)
+  }
+}
+a_c_2011_cor <- cor(bi_2011_adoption, bi_2011_checkout)
+
+# 2012 Adoption v Checkout
+bi_2012_checkout = c()
+for(j in preNorm_2012[1414:1607]){
+  if(j == 0){
+    bi_2012_checkout <- append(bi_2012_checkout, 0)
+  } else {
+    bi_2012_checkout <- append(bi_2012_checkout, 1)
+  }
+}
+bi_2012_adoption = c()
+for(j in adoption[1414:1607]){
+  if(j <= 31){
+    bi_2012_adoption <- append(bi_2012_adoption, 0)
+  } else {
+    bi_2012_adoption <- append(bi_2012_adoption, 1)
+  }
+}
+a_c_2012_cor <- cor(bi_2012_adoption, bi_2012_checkout)
+
+
+
+bi_adoption = c()
+for(j in adoption){
+  if(j <= 31){
+    bi_adoption <- append(bi_adoption, 0)
+  } else {
+    bi_adoption <- append(bi_adoption, 1)
+  }
+}
+
+plot(adoption, totalCheckout)
+cor(adoption, totalCheckout)
+
+plot(publishOrder, adoption)
+cor(publishOrder, adoption)
+
+plot(publishOrder, bi_adoption)
+cor(publishOrder, bi_adoption)
+
+bi_adoption2 = c()
+for(j in adoption){
+  if(j <= mean(adoption)){
+    bi_adoption2 <- append(bi_adoption, 0)
+  } else {
+    bi_adoption2 <- append(bi_adoption, 1)
+  }
+}
+#shapiro.test(bi_adoption2)
+#t.test(bi_adoption2)
+
+par(mfrow=c(3,3))
+title("CheckOut Count Year-to_Year", outer=TRUE)
+
+plot(preNorm_2006, preNorm_2007[0:222])
+plot(preNorm_2007, preNorm_2008[0:432])
+plot(preNorm_2008, preNorm_2009[0:587])
+plot(preNorm_2009, preNorm_2010[0:813])
+plot(preNorm_2010, preNorm_2011[0:1032])
+plot(preNorm_2011, preNorm_2012[0:1413])
+plot(preNorm_2012, preNorm_2013)
+plot(preNorm_2013, preNorm_2014)
+plot(preNorm_2014, preNorm_2015)
+# 
+# # 2013 Adoption v Checkout
+# bi_2013_checkout = c()
+# for(j in preNorm_2013){
+#   if(j == 0){
+#     bi_2013_checkout <- append(bi_2013_checkout, 0)
+#   } else {
+#     bi_2013_checkout <- append(bi_2013_checkout, 1)
+#   }
+# }
+# bi_2013_adoption = c()
+# for(j in adoption[0:1607]){
+#   if(j <= 31){
+#     bi_2013_adoption <- append(bi_2013_adoption, 0)
+#   } else {
+#     bi_2013_adoption <- append(bi_2013_adoption, 1)
+#   }
+# }
+# a_c_2013_cor <- cor(bi_2013_adoption, bi_2013_checkout)
+# 
+# # 2014 Adoption v Checkout
+# bi_2014_checkout = c()
+# for(j in preNorm_2014){
+#   if(j == 0){
+#     bi_2014_checkout <- append(bi_2014_checkout, 0)
+#   } else {
+#     bi_2014_checkout <- append(bi_2014_checkout, 1)
+#   }
+# }
+# bi_2014_adoption = c()
+# for(j in adoption[0:1607]){
+#   if(j <= 31){
+#     bi_2014_adoption <- append(bi_2014_adoption, 0)
+#   } else {
+#     bi_2014_adoption <- append(bi_2014_adoption, 1)
+#   }
+# }
+# a_c_2014_cor <- cor(bi_2014_adoption, bi_2014_checkout)
+# 
+# # 2015 Adoption v Checkout
+# bi_2015_checkout = c()
+# for(j in preNorm_2015){
+#   if(j == 0){
+#     bi_2015_checkout <- append(bi_2015_checkout, 0)
+#   } else {
+#     bi_2015_checkout <- append(bi_2015_checkout, 1)
+#   }
+# }
+# bi_2015_adoption = c()
+# for(j in adoption[0:1607]){
+#   if(j <= 31){
+#     bi_2015_adoption <- append(bi_2015_adoption, 0)
+#   } else {
+#     bi_2015_adoption <- append(bi_2015_adoption, 1)
+#   }
+# }
+# a_c_2015_cor <- cor(bi_2015_adoption, bi_2015_checkout)
+
+par(mfrow=c(3,2))
+plot(totalCheckout, adoption, xlab="Total Checkouts", ylab="Adoption[days]", main="Total Checkouts on Dewey Number")
+cor(totalCheckout, adoption)
+
+plot(publishDay, adoption, xlab="Publish Day of Year", ylab="adoption [days]", main="Publish Day of Year on Adoption")
+cor(publishDay, adoption)
+
+plot(publishDay, fcheckoutDay, xlab="Publish Day of Year", ylab="First Checkout Day of Year", main="Publish Day of Year on First Checkout Day")
+cor(publishDay, fcheckoutDay)
+
+plot(publishDay, deweyNumber, xlab="Publish Day of Year", ylab="Dewey Number", main="Publish Day of Year on Dewey Number")
+cor(publishDay, deweyNumber)
+
+plot(fcheckoutDay, deweyNumber, xlab="First Checkout Day of Year", ylab="Dewey Number", main="First Checkout Day of Year on Dewey Number")
+cor(fcheckoutDay, deweyNumber)
+
+plot(publishDay, totalCheckout, xlab="Publish Day of Year", ylab="Total Checkouts", main="Publish Day of Year on Total Checkouts")
+cor(publishDay, totalCheckout)
+```
+

@@ -1,0 +1,292 @@
+---
+title: "SPL"
+author: "Thomas Hervey"
+date: "3.18.16"
+output: pdf_document
+---
+
+```{r echo=FALSE}
+# load starting data
+rm(list=ls())
+#par(mar=c(1,1,1,1))
+dat = read.csv("FINAL_working.csv", header=TRUE)
+dat[]
+# get columns
+bib = dat[,1]
+isbn = dat[,2]
+bookType = dat[,3]
+title = dat[,4]
+publishDate = dat[,5]
+publishOrder = dat[,6]
+firstCheckOut = dat[,7]
+lastCheckOut = dat[,8]f
+adoption = dat[,9]
+publishDay = dat[,10]
+fcheckoutDay = dat[,11]
+ageFull = dat[,12]
+ageCheckouts = dat[,13]
+y2006 = dat[,14]
+y2007 = dat[,15]
+y2008 = dat[,16]
+y2009 = dat[,17]
+y2010 = dat[,18]
+y2011 = dat[,19]
+y2012 = dat[,20]
+y2013 = dat[,21]
+y2014 = dat[,22]
+y2015 = dat[,23]
+totalCheckout = dat[,24]
+deweyNumber = dat[,25]
+deweyCategory = dat[,26]
+
+# label column names
+colnames(dat) = c("bib","isbn", "bookType", "title",	"publishDate", "publishOrder", "firstCheckOutlastCheckOut", "adoption", "publishDay", "fcheckoutDay", "ageFull", "ageCheckouts", "y2006", "y2007", "y2008", "y2009", "y2010", "y2011", "y2012", "y2013", "y2014", "y2015", "totalCheckout", "deweyNumber", "deweyCategory")
+
+preNorm_2006 = c()
+for(j in y2006){
+  if(j != 10000){
+    preNorm_2006 <- append(preNorm_2006, j)
+  }
+}
+preNorm_2007 = c()
+for(j in y2007){
+  if(j != 10000){
+    preNorm_2007 <- append(preNorm_2007, j)
+  }
+}
+preNorm_2008 = c()
+for(j in y2008){
+  if(j != 10000){
+    preNorm_2008 <- append(preNorm_2008, j)
+  }
+}
+preNorm_2009 = c()
+for(j in y2009){
+  if(j != 10000){
+    preNorm_2009 <- append(preNorm_2009, j)
+  }
+}
+preNorm_2010 = c()
+for(j in y2010){
+  if(j != 10000){
+    preNorm_2010 <- append(preNorm_2010, j)
+  }
+}
+preNorm_2011 = c()
+for(j in y2011){
+  if(j != 10000){
+    preNorm_201 <- append(preNorm_201, j)
+  }
+}
+preNorm_2012 = c()
+for(j in y2012){
+  if(j != 10000){
+    preNorm_2012 <- append(preNorm_2012, j)
+  }
+}
+preNorm_2013 = c()
+for(j in y2013){
+  if(j != 10000){
+    preNorm_2013 <- append(preNorm_2013, j)
+  }
+}
+preNorm_2014 = c()
+for(j in y2014){
+  if(j != 10000){
+    preNorm_2014 <- append(preNorm_2014, j)
+  }
+}
+preNorm_2015 = c()
+for(j in y2015){
+  if(j != 10000){
+    preNorm_2015 <- append(preNorm_2015, j)
+  }
+}
+```
+_____________________________________________________________
+#SECTION 1: EXPLORING THE DATA
+
+
+```{r}
+library(MASS)
+?fitdistr
+
+plot(publishOrder, adoption, main="Adoption over Publication Order", ylab="Adoption [days]", xlab="Publication Order")
+lines(publishOrder, adoption)
+points(publishOrder, adoption, lty=1, col="red", lwd=1)
+hist(adoption, breaks=500)
+#t-test (lower adoption vs higher adoption)
+# running average
+t.test(adoption)
+
+lowerMedian_adoption = c()
+for(j in adoption){
+  if(j <= median(adoption)){
+    lowerMedian_adoption <- append(lowerMedian_adoption, j)
+  }
+}
+t.test(lowerMedian_adoption)
+
+upperMedian_adoption = c()
+for(j in adoption){
+  if(j >= median(adoption)){
+    upperMedian_adoption <- append(upperMedian_adoption, j)
+  }
+}
+t.test(upperMedian_adoption)
+
+# MEAN
+lowerMean_adoption = c()
+for(j in adoption){
+  if(j <= mean(adoption)){
+    lowerMean_adoption <- append(lowerMean_adoption, j)
+  }
+}
+t.test(lowerMean_adoption)
+
+upperMean_adoption = c()
+for(j in adoption){
+  if(j >= mean(adoption)){
+    upperMean_adoption <- append(upperMean_adoption, j)
+  }
+}
+t.test(upperMean_adoption)
+
+
+
+
+
+SD_adoption = sd(adoption)
+MEAN_adoption = mean(adoption)
+summary(adoption)
+hist(adoption, breaks = 30)
+
+COV_adoption = cov(publishOrder, adoption)
+COR_adoption = cor(publishOrder, adoption)
+
+#make quantitative so that I can correlate
+# break myself (1,2,3-4, etc.)
+
+mean(adoption)
+
+fitdistr(adoption,"f", start=list(df1=1000, df2=1))
+fitdistr(adoption, "weibull")
+hist(adoption, breaks = 30)
+
+Z_adoption = (adoption - mean(adoption))/ sd(adoption)
+Z_publication = (publishOrder - mean(publishOrder)) / sd(publishOrder)
+
+hist(Z_adoption,breaks=20, col= "red", prob= TRUE, main="Adoption Z-Score Distribution, 20 breaks", xlab="Z-score", ylab="count")
+curve(dnorm(x, mean=mean(Z_adoption), sd=sd(Z_adoption)), 
+          col="black", lwd=2, add=TRUE, yaxt="n")
+legend("topleft", ncol=2, legend=c("20 breaks"), col=c("red"), lwd=1, cex=.2)
+
+qqnorm(Z_adoption,main= "Adoption")
+qqline(Z_adoption, col= "red")
+
+prob_adoption = 100*dnorm(tail(Z_adoption, n=1))
+```
+
+
+
+
+
+
+```{r}
+cor(preNorm_2015, deweyNumber)
+plot(preNorm_2015, deweyNumber)
+```
+
+
+
+
+
+SCRATCH WORK **********************************
+```{r echo=FALSE}
+library(MASS)
+?fitdistr
+
+# ***** exploring adoptions *****
+
+plot(publishOrder, adoption, main="Publication Order and Adoption", xlab="Publication Order (Dates Ordered)", ylab="Adoption (1st checkout - Pub Date) (days)")
+hist(adoption, prob= TRUE)
+curve(dnorm(x, mean=mean(adoption), sd=sd(adoption)), col="black", lwd=2, add=TRUE, yaxt="n")
+
+hist(adoption)
+hist(adoption, prob= TRUE)
+hist(sqrt(sqrt(adoption)), prob= TRUE)
+
+fitdistr(adoption, "lognormal")
+adoption_plnorm = plnorm(adoption,4.22030793,1.50353099)
+adoption_qnorm = qnorm(adoption_plnorm)
+
+hist(adoption_qnorm, breaks=30, prob=TRUE, xlab= "Percent Children with Stunted Growth", main="Log Base Normalized Stunted Growth Distribution")
+curve(dnorm(x, mean=mean(adoption), sd=sd(adoption)), col="blue", lwd=2, add=TRUE)
+
+qqnorm(adoption_qnorm, main= "Log Base Normalized Stunted Growth Quantile Plot")
+qqline (adoption_qnorm, col="blue")
+
+shapiro.test(adoption_qnorm)
+
+#plot(deweyNumber, adoption, main="Publication Order and Adoption", xlab="Publication Order (Dates Ordered)", ylab="Adoption (1st checkout - Pub Date) (days)")
+
+
+# ***** exploring checkouts *****
+
+
+```
+
+_____________________________________________________________
+#SECTION 2: EXPLORING NORMALIZATION
+```{r echo=FALSE}
+library(MASS)
+?fitdistr
+
+# 2006
+preNorm_2006 = c()
+for(j in y2006){
+  if(j != 10000){
+    preNorm_2006 <- append(preNorm_2006, j)
+  }
+}
+hist((preNorm_2006)^(1/4))
+hist(log10(preNorm_2006))
+hist(preNorm_2006)
+hist(log(log(preNorm_2006)))
+
+shapiro.test(preNorm_2006)
+
+shapiro.test(log(log(preNorm_2006)))
+
+
+
+# 2015
+preNorm_2015 = c()
+for(j in y2015){
+  if(j != 10000){
+    preNorm_2015 <- append(preNorm_2015, j)
+  }
+}
+hist(log(log(preNorm_2015)))
+shapiro.test(log(log(preNorm_2015)))
+
+plot(publishOrder, adoption)
+
+plot(deweyNumber, totalCheckout) #total dewey
+plot(deweyNumber, adoption) #total & lumping(ranges ie. 100 vs 200) t-test statistic (take into account that there are large differences between each dewey category in terms of count) (Ud-u)/o -> F(sqrt(n))
+plot(publishDay, fcheckoutDay, col = totalCheckout, xlab="Publish [day of year]", ylab="First Checkout [day of year]", main="Book Adoption Day of Year") #t-test
+legend("topleft", ncol=4, legend=c("1", "2", "3", "4"), col=c("Black", "Blue", "Green", "Yellow"), lwd=1, cex=.5)
+
+#adopton = N(u,o)
+#gievn this adoption rate, and transform the numbers into z scores & average
+
+
+plot(publishOrder[1:222], preNorm_2006)
+plot(publishOrder[1:432], preNorm_2007)
+plot(publishOrder[1:222], preNorm_2008)
+plot(publishOrder[1:222], preNorm_2006)
+hist()
+```
+
+
+
